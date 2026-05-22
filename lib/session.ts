@@ -70,5 +70,53 @@ function signSessionToken(userId: string): string {
   return signSession({ userId, exp });
 }
 
-export { signSession, signSessionToken, verifySession };
+// Extract session from NextRequest (for API routes)
+interface SessionUser {
+  id: string;
+}
+
+interface Session {
+  user?: SessionUser;
+}
+
+function getSession(request: any): Session | null {
+  try {
+    // Get the cookie from the request headers
+    const cookieHeader = request.headers?.get?.('cookie');
+    if (!cookieHeader) {
+      return null;
+    }
+
+    // Parse cookies from header
+    const cookies = Object.fromEntries(
+      cookieHeader
+        .split('; ')
+        .map((cookie: string) => {
+          const [key, value] = cookie.split('=');
+          return [key, value];
+        })
+    );
+
+    const token = cookies[SESSION_COOKIE_NAME];
+    if (!token) {
+      return null;
+    }
+
+    const payload = verifySession(token);
+    if (!payload) {
+      return null;
+    }
+
+    return {
+      user: {
+        id: payload.userId
+      }
+    };
+  } catch (error) {
+    console.error('[SESSION] Error getting session:', error);
+    return null;
+  }
+}
+
+export { signSession, signSessionToken, verifySession, getSession };
 

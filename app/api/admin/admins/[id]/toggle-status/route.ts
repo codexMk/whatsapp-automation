@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
+import type { UserStatus } from '@prisma/client';
 import { verifySession } from '@/lib/session';
 import { db } from '@/lib/db';
+
+export const dynamic = 'force-dynamic';
 
 /**
  * PATCH /api/admin/admins/[id]/toggle-status
@@ -48,7 +51,7 @@ export async function PATCH(
     // Check if target is an admin
     const targetAdmin = await db.user.findUnique({
       where: { id: adminId },
-      select: { role: true, isActive: true }
+      select: { role: true, status: true }
     });
 
     if (!targetAdmin || (targetAdmin.role !== 'ADMIN' && targetAdmin.role !== 'SUPER_ADMIN')) {
@@ -59,22 +62,24 @@ export async function PATCH(
     }
 
     // Toggle active status
+    const nextStatus: UserStatus = targetAdmin.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE';
+
     const updatedAdmin = await db.user.update({
       where: { id: adminId },
-      data: { isActive: !targetAdmin.isActive },
+      data: { status: nextStatus },
       select: {
         id: true,
         name: true,
         email: true,
         role: true,
-        isActive: true,
+        status: true,
         lastLoginAt: true,
       }
     });
 
     return NextResponse.json({
       success: true,
-      message: `Admin ${updatedAdmin.isActive ? 'activated' : 'deactivated'} successfully`,
+      message: `Admin ${updatedAdmin.status === 'ACTIVE' ? 'activated' : 'suspended'} successfully`,
       data: updatedAdmin
     });
   } catch (error) {

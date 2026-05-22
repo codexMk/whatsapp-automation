@@ -405,7 +405,7 @@ export default function AdminTemplatesPage() {
                     className="group relative bg-white border border-gray-200 rounded-2xl shadow-sm hover:shadow-xl hover:border-blue-300 transition-all duration-300 overflow-hidden"
                   >
                     {/* Hover Glow Effect */}
-                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl blur opacity-0 group-hover:opacity-10 transition duration-300 -z-1"></div>
+                    <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl blur opacity-0 group-hover:opacity-10 transition duration-300 -z-1" />
 
                     <div className="relative p-6">
                       {/* Header with Category Badge */}
