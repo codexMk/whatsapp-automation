@@ -1,0 +1,255 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String           @id @default(cuid())
+  email          String           @unique
+  password       String
+  name           String?
+  role           UserRole         @default(USER)
+  status         UserStatus       @default(ACTIVE)
+  permissions    String[]         @default([])  // JSON array of permission strings
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  // Business / tenant-related
+  businessName   String?
+  industry       String?
+  whatsappNumber String?
+
+  // Plan info
+  planId         String?
+  plan           Plan?            @relation(fields: [planId], references: [id])
+
+  customers      Customer[]
+  campaigns      Campaign[]
+  automations    Automation[]
+  templates      Template[]
+  settings       BusinessSettings?
+  messageLogs    MessageLog[]
+}
+
+model Customer {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  name      String
+  phone     String
+  email     String?
+  tags      String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messageLogs MessageLog[]
+
+  @@index([userId, createdAt])
+  @@index([userId, phone])
+}
+
+model Campaign {
+  id          String          @id @default(cuid())
+  userId      String
+  user        User            @relation(fields: [userId], references: [id])
+
+  name        String
+  description String?
+  status      CampaignStatus  @default(DRAFT)
+  templateId  String?
+  template    Template?       @relation(fields: [templateId], references: [id])
+
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  messageLogs MessageLog[]
+
+  @@index([userId, status, createdAt])
+  @@index([userId, templateId])
+}
+
+model Automation {
+  id          String            @id @default(cuid())
+  userId      String
+  user        User              @relation(fields: [userId], references: [id])
+
+  name        String
+  description String?
+  enabled     Boolean           @default(false)
+  triggerType AutomationTrigger @default(NEW_CUSTOMER)
+
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  messageLogs MessageLog[]
+
+  @@index([userId, enabled, triggerType])
+}
+
+model Template {
+  id          String   @id @default(cuid())
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  name        String
+  category    String?
+  content     String
+  // JSON array of variables used in the template (e.g. ["name", "date"])
+  variables   Json?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  campaigns   Campaign[]
+
+  messageLogs MessageLog[]
+
+  @@index([userId, category])
+}
+
+model BusinessSettings {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  user            User     @relation(fields: [userId], references: [id])
+
+  businessName    String?
+  industry        String?
+  whatsappNumber  String?
+  timezone        String?  @default("UTC")
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model MessageLog {
+  id            String         @id @default(cuid())
+  userId        String
+  user          User           @relation(fields: [userId], references: [id])
+
+  customerId    String?
+  customer      Customer?      @relation(fields: [customerId], references: [id])
+
+  campaignId    String?
+  campaign      Campaign?      @relation(fields: [campaignId], references: [id])
+
+  automationId  String?
+  automation    Automation?    @relation(fields: [automationId], references: [id])
+
+  templateId    String?
+  template      Template?      @relation(fields: [templateId], references: [id])
+
+  toPhone       String
+  content       String
+  status        MessageStatus  @default(PENDING)
+  error         String?
+
+  sentAt        DateTime?
+  deliveredAt   DateTime?
+  scheduledFor  DateTime?
+
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  @@index([userId, createdAt])
+  @@index([userId, status, createdAt])
+  @@index([campaignId])
+  @@index([automationId])
+  @@index([customerId])
+}
+
+model Plan {
+  id                String   @id @default(cuid())
+  name              String   @unique
+  price             Float
+  messageLimit      Int
+  automationLimit   Int
+  features          String[]
+  description       String?
+  active            Boolean  @default(true)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  users             User[]
+
+  @@index([active])
+}
+
+model BlogPost {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  content   String
+  image     String?
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published, createdAt])
+}
+
+model Page {
+  id        String   @id @default(cuid())
+  title     String
+  slug      String   @unique
+  content   String
+  visible   Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([visible])
+}
+
+model PlatformSettings {
+  id                String   @id @default(cuid())
+  settingKey        String   @unique
+  settingValue      String
+  description       String?
+  updatedAt         DateTime @updatedAt
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  USER
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DELETED
+}
+
+enum CampaignStatus {
+  DRAFT
+  SCHEDULED
+  SENT
+}
+
+enum AutomationTrigger {
+  NEW_CUSTOMER
+  APPOINTMENT_BOOKED
+  FOLLOW_UP
+}
+
+// Alias enum to satisfy AutomationTriggerType requirement while keeping existing usage.
+enum AutomationTriggerType {
+  NEW_CUSTOMER
+  APPOINTMENT_BOOKED
+  FOLLOW_UP
+}
+
+enum MessageStatus {
+  PENDING
+  SENT
+  DELIVERED
+  FAILED
+}
+
