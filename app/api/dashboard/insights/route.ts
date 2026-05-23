@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { verifySession } from '@/lib/session';
 import { db } from '@/lib/db';
+export const dynamic = "force-dynamic";
 
 /**
  * GET /api/dashboard/insights

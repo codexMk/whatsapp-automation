@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/session";
 import { isAdmin, getAdminDashboardStats } from "@/lib/admin";
 
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/admin/stats
  * Returns dashboard statistics (admin only)

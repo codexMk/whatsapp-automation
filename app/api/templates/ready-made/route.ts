@@ -8,6 +8,8 @@ import {
   getReadyMadeTemplateById,
 } from "@/lib/default-templates";
 
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/templates/ready-made
  * Fetch ready-made templates, optionally filtered by category

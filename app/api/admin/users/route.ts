@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { verifySession } from '@/lib/session';
 import { db } from '@/lib/db';
+export const dynamic = "force-dynamic";
 
 /**
  * GET /api/admin/users - List all users with pagination
@@ -49,8 +50,8 @@ export async function GET(request: NextRequest) {
     const whereClause = search
       ? {
           OR: [
-            { email: { contains: search, mode: 'insensitive' } },
-            { businessName: { contains: search, mode: 'insensitive' } },
+            { email: { contains: search } },
+            { businessName: { contains: search } },
           ],
         }
       : {};

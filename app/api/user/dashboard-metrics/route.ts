@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 import { verifySession } from '@/lib/session';
 import { db } from '@/lib/db';
 import { getRecommendedTemplatesLimited } from '@/lib/default-templates';
+export const dynamic = "force-dynamic";
 
 /**
  * GET /api/user/dashboard-metrics

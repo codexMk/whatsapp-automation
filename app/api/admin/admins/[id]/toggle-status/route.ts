@@ -17,7 +17,7 @@ export async function PATCH(
 ) {
   try {
     const { id: adminId } = await params;
-    
+
     const cookieStore = await cookies();
     const token = cookieStore.get('wa_session')?.value;
 
@@ -73,7 +73,6 @@ export async function PATCH(
         email: true,
         role: true,
         status: true,
-        lastLoginAt: true,
       }
     });
 

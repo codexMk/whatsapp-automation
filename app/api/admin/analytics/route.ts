@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { verifySession } from "@/lib/session";
 import { db } from "@/lib/db";
 import { canViewAnalytics } from "@/lib/auth/permissions";
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {

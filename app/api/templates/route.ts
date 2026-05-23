@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { verifySession } from "@/lib/session";
 import { createTemplate, listTemplates, templateInputSchema } from "@/lib/templates";
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {

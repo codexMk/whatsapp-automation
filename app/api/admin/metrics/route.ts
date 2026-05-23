@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
             name: true,
             messageLimit: true,
             price: true,
-            extraMessagePrice: true
+            // extraMessagePrice removed: field not present on PlanSelect
           }
         }
       }

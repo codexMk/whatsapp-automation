@@ -5,6 +5,7 @@ import { db } from '@/lib/db';
 import { hashPassword } from '@/lib/auth';
 import { DEFAULT_PERMISSIONS } from '@/lib/auth/permissions-util';
 import { z } from 'zod';
+export const dynamic = "force-dynamic";
 
 const createAdminSchema = z.object({
   name: z.string().min(2),
@@ -64,8 +65,6 @@ export async function GET(request: NextRequest) {
         role: true,
         permissions: true,
         status: true,
-        isActive: true,
-        lastLoginAt: true,
         createdAt: true,
         updatedAt: true,
       },

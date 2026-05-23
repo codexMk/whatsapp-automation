@@ -8,6 +8,8 @@ import {
   searchReadyMadeTemplates,
 } from "@/lib/default-templates";
 
+export const dynamic = "force-dynamic";
+
 /**
  * GET /api/admin/templates
  * Admin endpoint to view and manage ready-made templates

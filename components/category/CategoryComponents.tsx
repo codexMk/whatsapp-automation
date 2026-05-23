@@ -2,7 +2,7 @@
 
 import { useCategoryOrNull } from "@/lib/category-hooks";
 import { getRecommendedTemplates } from "@/lib/category-config";
-import { AppCard } from "./AppCard";
+import { AppCard } from "@/components/ui/AppCard";
 
 /**
  * CategoryTemplateRecommendations
