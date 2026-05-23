@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { hashPassword, verifyPassword } from "@/lib/auth";
 import { validateSession } from "@/lib/session-server";
 import { sendPasswordChangedEmail } from "@/lib/email-service";
+export const dynamic = "force-dynamic";
 
 const changePasswordSchema = z.object({
   currentPassword: z.string().min(8),

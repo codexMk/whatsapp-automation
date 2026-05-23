@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { validateSession } from "@/lib/session-server";
 import { db } from "@/lib/db";
 import { calculateExtraCost, calculateUsagePercentage } from "@/lib/pricing";
+export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   try {
@@ -33,16 +34,16 @@ export async function GET(req: NextRequest) {
       select: {
         id: true,
         email: true,
+        createdAt: true,
         messagesUsedThisMonth: true,
         extraMessagesUsed: true,
-        createdAt: true,
         plan: {
           select: {
             id: true,
             name: true,
             messageLimit: true,
             price: true,
-            // extraMessagePrice removed: field not present on PlanSelect
+            extraMessagePrice: true
           }
         }
       }
@@ -80,10 +81,11 @@ export async function GET(req: NextRequest) {
       // Calculate revenue from subscription + extra messages
       if (u.plan) {
         totalRevenue += u.plan.price;
-       const extraCost = calculateExtraCost(
-  u.extraMessagesUsed,
-  0
-);
+        const extraCost = calculateExtraCost(
+          u.extraMessagesUsed,
+          u.plan.extraMessagePrice || 0
+        );
+        totalExtraCost += extraCost;
       }
     });
 

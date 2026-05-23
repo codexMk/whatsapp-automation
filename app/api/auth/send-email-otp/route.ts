@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { generateOTP, getOTPExpiryTime, validateEmail } from "@/lib/otp-utils";
 import { sendOTPEmail } from "@/lib/email-service";
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {

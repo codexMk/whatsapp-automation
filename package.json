@@ -10,7 +10,7 @@
 
     "dev": "next dev",
 
-    "build": "next build",
+    "build": "prisma generate && next build",
 
     "start": "next start",
 
@@ -18,7 +18,9 @@
 
     "prisma:generate": "prisma generate",
 
-    "prisma:migrate": "prisma migrate dev"
+    "prisma:migrate": "prisma migrate dev",
+
+    "postinstall": "prisma generate"
 
   },
 

@@ -3,6 +3,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { sendPasswordResetEmail } from "@/lib/email-service";
 import crypto from "crypto";
+export const dynamic = "force-dynamic";
 
 const forgotPasswordSchema = z.object({
   email: z.string().email()

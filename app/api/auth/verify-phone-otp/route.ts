@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { isOTPExpired, normalizeIndianPhone } from "@/lib/otp-utils";
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {

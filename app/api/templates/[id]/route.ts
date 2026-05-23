@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session-server";
 import { getTemplateById, templateUpdateSchema, updateTemplate } from "@/lib/templates";
+export const dynamic = "force-dynamic";
 
 type RouteParams = {
   params: {

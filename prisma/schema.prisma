@@ -14,6 +14,8 @@ model User {
   name           String?
   role           UserRole         @default(USER)
   status         UserStatus       @default(ACTIVE)
+  isActive       Boolean          @default(true)
+  lastLoginAt    DateTime?
   permissions    String[]         @default([])  // JSON array of permission strings
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
@@ -22,10 +24,24 @@ model User {
   businessName   String?
   industry       String?
   whatsappNumber String?
+  ownerName      String?
+  category       String?
+  address        String?
+  phone          String?
+  emailVerified  Boolean          @default(false)
+  phoneVerified  Boolean          @default(false)
+  isBusinessVerified Boolean      @default(false)
+  passwordResetToken String?
+  passwordResetTokenExpiresAt DateTime?
 
   // Plan info
   planId         String?
   plan           Plan?            @relation(fields: [planId], references: [id])
+
+  messagesUsedThisMonth Int     @default(0)
+  extraMessagesUsed      Int     @default(0)
+  estimatedExtraCost     Float   @default(0)
+  lastMessageResetDate   DateTime? @default(now())
 
   customers      Customer[]
   campaigns      Campaign[]
@@ -33,6 +49,32 @@ model User {
   templates      Template[]
   settings       BusinessSettings?
   messageLogs    MessageLog[]
+  otpVerifications OTPVerification[]
+}
+
+model OTPVerification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  email     String?
+  phone     String?
+  otp       String
+  type      OTPType
+  verified  Boolean  @default(false)
+  expiresAt DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, type])
+  @@index([email])
+  @@index([phone])
+}
+
+enum OTPType {
+  EMAIL
+  PHONE
 }
 
 model Customer {
@@ -170,6 +212,7 @@ model Plan {
   name              String   @unique
   price             Float
   messageLimit      Int
+  extraMessagePrice Float    @default(0)
   automationLimit   Int
   features          String[]
   description       String?

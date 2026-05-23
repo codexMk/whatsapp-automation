@@ -3,6 +3,7 @@ import { z } from "zod";
 import { AutomationTrigger } from "@prisma/client";
 import { getAutomations, createAutomation, toggleAutomation, updateAutomation } from "@/lib/automations";
 import { getSessionUserId } from "@/lib/session-server";
+export const dynamic = "force-dynamic";
 
 const automationSchema = z.object({
   name: z.string(),

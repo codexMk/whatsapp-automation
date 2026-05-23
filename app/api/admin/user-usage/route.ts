@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { validateSession } from "@/lib/session-server";
 import { db } from "@/lib/db";
 import { calculateRemainingMessages, calculateUsagePercentage, calculateExtraCost } from "@/lib/pricing";
+export const dynamic = "force-dynamic";
 
 export async function GET(req: NextRequest) {
   try {

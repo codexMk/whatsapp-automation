@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { hashPassword } from "@/lib/auth";
 import { sendPasswordChangedEmail } from "@/lib/email-service";
 import crypto from "crypto";
+export const dynamic = "force-dynamic";
 
 const resetPasswordSchema = z.object({
   token: z.string(),

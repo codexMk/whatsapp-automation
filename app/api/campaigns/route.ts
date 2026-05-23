@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getSessionUserId } from "@/lib/session-server";
 import { campaignInputSchema, createCampaignWithLogs, listCampaigns } from "@/lib/campaigns";
+export const dynamic = "force-dynamic";
 
 export async function GET() {
   const userId = await getSessionUserId();

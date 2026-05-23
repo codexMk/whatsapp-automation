@@ -68,7 +68,9 @@ export async function trackMessageUsage(
 
     // Check if we need to reset monthly counter
     const now = new Date();
-    const lastReset = new Date(user.lastMessageResetDate);
+    const lastReset = user.lastMessageResetDate
+      ? new Date(user.lastMessageResetDate)
+      : new Date(0);
     const needsReset =
       now.getMonth() !== lastReset.getMonth() ||
       now.getFullYear() !== lastReset.getFullYear();

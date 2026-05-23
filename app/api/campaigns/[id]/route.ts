@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { getSessionUserId } from "@/lib/session-server";
 import { campaignStatusSchema, getCampaignById, updateCampaignStatus } from "@/lib/campaigns";
+export const dynamic = "force-dynamic";
 
 type RouteParams = {
   params: {

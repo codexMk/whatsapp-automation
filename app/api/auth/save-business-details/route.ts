@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { validateSession } from "@/lib/session-server";
 import { sendBusinessVerifiedEmail } from "@/lib/email-service";
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {

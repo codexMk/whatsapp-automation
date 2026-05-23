@@ -3,6 +3,7 @@ import { z } from "zod";
 import { db } from "@/lib/db";
 import { hashPassword } from "@/lib/auth";
 import { signSessionToken } from "@/lib/session";
+export const dynamic = "force-dynamic";
 
 const signupSchema = z.object({
   email: z.string().email(),
