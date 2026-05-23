@@ -80,9 +80,10 @@ export async function GET(req: NextRequest) {
       // Calculate revenue from subscription + extra messages
       if (u.plan) {
         totalRevenue += u.plan.price;
-        const extraCost = calculateExtraCost(u.extraMessagesUsed, u.plan.extraMessagePrice);
-        totalExtraCost += extraCost;
-        totalRevenue += extraCost;
+       const extraCost = calculateExtraCost(
+  u.extraMessagesUsed,
+  0
+);
       }
     });
 
